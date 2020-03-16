@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-import Image
+from PIL import Image
 
 # Constants for indicating coordinates in a pixel's context
 TOP_LEFT = 0
@@ -16,7 +16,7 @@ BOTTOM_RIGHT = 8
 # There are eight flags: the cells in the context, skipping the center
 context_flag = {}
 cur_flag = 1
-for i in xrange(9):
+for i in range(9):
     if i == CENTER:
         continue
     context_flag[i] = cur_flag
@@ -125,8 +125,8 @@ def hq2x(source):
 
         return sourcegrid[x, y]
 
-    for x in xrange(w):
-        for y in xrange(h):
+    for x in range(w):
+        for y in range(h):
             # This is a flattened 3x3 grid with the current pixel in the
             # middle; if the pixel is on an edge, the row/column in the void is
             # just a copy of the edge
@@ -138,10 +138,10 @@ def hq2x(source):
 
             tl, tr, bl, br = hq2x_pixel(context)
 
-            destgrid[x * 2, y * 2] = tl
-            destgrid[x * 2 + 1, y * 2] = tr
-            destgrid[x * 2, y * 2 + 1] = bl
-            destgrid[x * 2 + 1, y * 2 + 1] = br
+            destgrid[x * 2, y * 2] = tuple(map(lambda x: int(x), tl))
+            destgrid[x * 2 + 1, y * 2] = tuple(map(lambda x: int(x), tr))
+            destgrid[x * 2, y * 2 + 1] = tuple(map(lambda x: int(x), bl))
+            destgrid[x * 2 + 1, y * 2 + 1] = tuple(map(lambda x: int(x), br))
 
     return dest
 
@@ -162,7 +162,7 @@ def hq2x_pixel(context):
     yuv_px = rgb_to_yuv(context[CENTER])
 
     pattern = 0
-    for bit in xrange(9):
+    for bit in range(9):
         if bit != CENTER and not yuv_equal(yuv_context[bit], yuv_px):
             pattern = pattern | context_flag[bit]
 
